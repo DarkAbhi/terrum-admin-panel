@@ -26,6 +26,7 @@ import * as React from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
 import { brandService } from "@/services/brand.service";
+import Link from "next/link";
 
 async function deletePost(brandId: number) {
   const response = await brandService.deleteBrand(brandId);
@@ -49,6 +50,11 @@ export const brandTableColumns: ColumnDef<Brand>[] = [
   {
     accessorKey: "website",
     header: "Website",
+    cell: function Cell({ row }) {
+      const link: string = row.getValue("website");
+
+      return <a href={link}>{link}</a>;
+    },
   },
   {
     id: "actions",
