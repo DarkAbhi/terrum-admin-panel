@@ -24,7 +24,7 @@ export default async function BrandsLayout({ children }: BrandsLayoutProps) {
         <div className="container flex h-16 py-4">
           <MainNav items={dashboardConfig.mainNav} />
           <div className="flex my-auto ml-auto gap-4">
-            <ModeToggle/>
+            <ModeToggle />
             <UserAccountNav />
           </div>
         </div>

@@ -1,11 +1,14 @@
 import { BASE_API_URL } from "@/api/constants";
-import { brandTableColumns } from "@/components/brand/columns";
-import { DataTable } from "@/components/brand/data-table";
-import CreateButton from "@/components/create-button";
 import { DashboardHeader } from "@/components/header";
 import { getAccessTokenCookie } from "@/lib/session";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Metadata } from "next";
-
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -13,24 +16,31 @@ export const metadata: Metadata = {
 };
 
 export default async function DashboardPage() {
-
-  const apiResponse = await fetch(`${BASE_API_URL}/staff/brand/`, {
+  const apiResponse = await fetch(`${BASE_API_URL}/staff/dashboard-home`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${getAccessTokenCookie()}`,
     },
   });
-  const brands = await apiResponse.json()
+  const homePageResponse = await apiResponse.json();
 
   return (
     <div>
-      <DashboardHeader heading="Brands" text="Create and manage brands">
-        <CreateButton text="Add brand" route="dashboard/create" />
-      </DashboardHeader>
-      <div className="px-2 py-10">
-        <DataTable columns={brandTableColumns} data={brands} />
+      <DashboardHeader heading="Dashboard" text="Admin Panel" />
+      <div className="mt-4 grid grid-cols-5">
+        <Link href="/brands">
+          <Card>
+            <CardHeader>
+              <CardTitle>Brands</CardTitle>
+              <CardDescription>
+                Total: {homePageResponse.brands}
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        </Link>
       </div>
+      <div className="px-2 py-10"></div>
     </div>
   );
 }
