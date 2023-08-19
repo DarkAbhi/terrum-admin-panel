@@ -1,4 +1,4 @@
-import { BASE_API_URL } from "@/api/constants";
+import { BASE_API_URL } from "@/constants/constants";
 import { fetchWrapper } from "@/helpers/fetch-wrapper";
 import { redirect } from "next/navigation";
 
@@ -11,7 +11,7 @@ async function login(email: string, password: string) {
   return await fetchWrapper.post(`${BASE_API_URL}/staff-login`, {
     email,
     password,
-  });;
+  });
 }
 
 function logout() {

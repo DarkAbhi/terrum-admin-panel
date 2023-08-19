@@ -1,10 +1,10 @@
-import { BASE_API_URL } from "@/api/constants";
+import { BASE_API_URL } from "@/constants/constants";
 import { fetchWrapper } from "@/helpers/fetch-wrapper";
 
 export const brandService = {
   createBrand,
   getBrandsByPage,
-  deleteBrand
+  deleteBrand,
 };
 
 async function createBrand(name: string, website: string) {
@@ -14,10 +14,10 @@ async function createBrand(name: string, website: string) {
   });
 }
 
-async function deleteBrand(id:number) {
+async function deleteBrand(id: number) {
   return await fetchWrapper.delete(`${BASE_API_URL}/staff/brand/${id}/`, null);
 }
 
 async function getBrandsByPage() {
-  return await fetchWrapper.get(`${BASE_API_URL}/staff/brand/`,null);
+  return await fetchWrapper.get(`${BASE_API_URL}/staff/brand/`, null);
 }

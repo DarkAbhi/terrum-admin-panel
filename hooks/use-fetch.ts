@@ -1,4 +1,4 @@
-import { BASE_API_URL } from "@/api/constants";
+import { BASE_API_URL } from "@/constants/constants";
 import Cookies from "js-cookie";
 import { useState, useEffect } from "react";
 
@@ -47,7 +47,6 @@ export const useApiGet = (
       setStatusText(apiResponse.statusText);
       setResult(json);
     } catch (error) {
-      console.log(error);
       setError(error);
     }
     setLoading(false);
