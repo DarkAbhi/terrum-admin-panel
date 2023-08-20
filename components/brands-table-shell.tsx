@@ -134,6 +134,14 @@ export function BrandsTableShell({ data, pageCount }: BrandsTableShellProps) {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-[160px]">
                   <DropdownMenuItem
+                  className="cursor-pointer"
+                    onSelect={() => {
+                      router.push(`brands/edit/${brand.id}`);
+                    }}
+                  >
+                    Edit
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
                     className="flex cursor-pointer items-center text-destructive focus:text-destructive"
                     onSelect={() => setShowDeleteAlert(true)}
                   >

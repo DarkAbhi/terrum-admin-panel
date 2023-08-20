@@ -11,14 +11,24 @@ import { brandService } from "@/services/brand.service";
 import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 import { Icons } from "../icons";
+import { Brand } from "@/types/brand";
 
 type FormData = z.infer<typeof brandFormSchema>;
 
-export default function CreateBrandForm() {
+interface EditBrandFormProps {
+  brand: Brand;
+}
+
+export default function EditBrandForm({ brand }: EditBrandFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const router = useRouter();
 
   const { toast } = useToast();
+
+  const defaultValues: FormData = {
+    name: brand.name,
+    website: brand.website,
+  };
 
   const {
     register,
@@ -27,14 +37,20 @@ export default function CreateBrandForm() {
     clearErrors,
   } = useForm<FormData>({
     resolver: zodResolver(brandFormSchema),
+    defaultValues,
   });
 
   async function onSubmit(data: FormData) {
     setIsLoading(true);
-    const apiResponse = await brandService.createBrand(data.name, data.website);
+    const apiResponse = await brandService.editBrand(
+      brand.id,
+      data.name,
+      data.website
+    );
     setIsLoading(false);
     if (!apiResponse.error) {
       router.push("/brands");
+      router.refresh();
     } else {
       toast({
         variant: "destructive",
@@ -64,7 +80,7 @@ export default function CreateBrandForm() {
       <Input type="text" placeholder="Brand website" {...register("website")} />
       <Button disabled={isLoading} className="w-1/2">
         {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-        Create
+        Update
       </Button>
     </form>
   );
