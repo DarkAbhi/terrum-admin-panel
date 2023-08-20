@@ -1,4 +1,4 @@
-import { BASE_API_URL } from "@/api/constants";
+import { BASE_API_URL } from "@/constants/constants";
 import { DashboardHeader } from "@/components/header";
 import { getAccessTokenCookie } from "@/lib/session";
 import {

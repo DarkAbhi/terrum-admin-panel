@@ -1,4 +1,4 @@
-import { BASE_API_URL } from "@/api/constants";
+import { BASE_API_URL } from "@/constants/constants";
 import { authService } from "@/services/auth.service";
 import Cookies from "js-cookie";
 
@@ -41,7 +41,6 @@ function request(method: string) {
 // helper functions
 
 function authHeader(url: string) {
-  console.log(`TOKEN = ${Cookies.get("access_token")}`);
   // return auth header with jwt if user is logged in and request is to the api url
   const isLoggedIn = true ? Cookies.get("access_token") : false;
   const isApiUrl = url.startsWith(BASE_API_URL);
