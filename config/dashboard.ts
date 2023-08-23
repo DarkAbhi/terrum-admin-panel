@@ -13,5 +13,10 @@ export const dashboardConfig: DashboardConfig = {
       href: "/brands",
       icon: "brand",
     },
+    {
+      title: "Challenges",
+      href: "/challenges",
+      icon: "challenge",
+    },
   ],
 };

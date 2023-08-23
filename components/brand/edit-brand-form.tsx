@@ -25,11 +25,6 @@ export default function EditBrandForm({ brand }: EditBrandFormProps) {
 
   const { toast } = useToast();
 
-  const defaultValues: FormData = {
-    name: brand.name,
-    website: brand.website,
-  };
-
   const {
     register,
     handleSubmit,
@@ -37,7 +32,10 @@ export default function EditBrandForm({ brand }: EditBrandFormProps) {
     clearErrors,
   } = useForm<FormData>({
     resolver: zodResolver(brandFormSchema),
-    defaultValues,
+    defaultValues: {
+      name: brand.name,
+      website: brand.website,
+    },
   });
 
   async function onSubmit(data: FormData) {

@@ -28,7 +28,7 @@ export default async function DashboardPage() {
   return (
     <div>
       <DashboardHeader heading="Dashboard" text="Admin Panel" />
-      <div className="mt-4 grid grid-cols-5">
+      <div className="mt-4 grid grid-cols-2 md:grid-cols-5">
         <Link href="/brands">
           <Card>
             <CardHeader>
