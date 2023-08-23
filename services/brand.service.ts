@@ -4,7 +4,6 @@ import { fetchWrapper } from "@/helpers/fetch-wrapper";
 
 export const brandService = {
   createBrand,
-  getBrandsByPage,
   deleteBrand,
   editBrand,
 };
@@ -27,8 +26,4 @@ async function editBrand(id: number, name: string, website: string) {
 
 async function deleteBrand(id: number) {
   return await fetchWrapper.delete(`${BRANDS_URL}${id}/`, null);
-}
-
-async function getBrandsByPage() {
-  return await fetchWrapper.get(`${BRANDS_URL}`, null);
 }

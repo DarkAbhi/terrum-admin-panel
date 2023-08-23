@@ -21,21 +21,22 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { brandService } from "@/services/brand.service";
-import { Brand } from "@/types/brand";
+import { Challenge } from "@/types/challenge";
 import { formatCreatedDateForTable } from "@/utils/date-utils";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { type ColumnDef } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { toast } from "./ui/use-toast";
+import { challengeService } from "@/services/challenge.service";
 
-interface BrandsTableShellProps {
-  data: Brand[];
+interface ChallengesTableShellProps {
+  data: Challenge[];
   pageCount: number;
 }
 
-async function deleteBrand(brandId: number) {
-  const response = await brandService.deleteBrand(brandId);
+async function deleteChallenge(challengeId: number) {
+  const response = await challengeService.deleteChallenge(challengeId);
 
   if (response.status) {
     return true;
@@ -43,16 +44,19 @@ async function deleteBrand(brandId: number) {
 
   toast({
     title: "Something went wrong.",
-    description: "Brand was not deleted. Please try again.",
+    description: "Challenge was not deleted. Please try again.",
     variant: "destructive",
   });
 }
 
-export function BrandsTableShell({ data, pageCount }: BrandsTableShellProps) {
+export function ChallengesTableShell({
+  data,
+  pageCount,
+}: ChallengesTableShellProps) {
   const [isPending, startTransition] = React.useTransition();
 
   // Memoize the columns so they don't re-render on every render
-  const columns = React.useMemo<ColumnDef<Brand, unknown>[]>(
+  const columns = React.useMemo<ColumnDef<Challenge, unknown>[]>(
     () => [
       {
         accessorKey: "name",
@@ -71,34 +75,15 @@ export function BrandsTableShell({ data, pageCount }: BrandsTableShellProps) {
         enableSorting: false,
       },
       {
-        accessorKey: "website",
+        accessorKey: "start_date",
         header: ({ column }) => (
-          <DataTableColumnHeader column={column} title="Website" />
-        ),
-        cell: ({ row }) => {
-          return (
-              <div className="flex space-x-2">
-              <a href={row.getValue("website")} target="_blank" className="max-w-[500px] truncate">
-                {row.getValue("website")}
-              </a>
-            </div>
-          );
-        },
-        enableSorting: false,
-        filterFn: (row, id, value) => {
-          return value instanceof Array && value.includes(row.getValue(id));
-        },
-      },
-      {
-        accessorKey: "created_at",
-        header: ({ column }) => (
-          <DataTableColumnHeader column={column} title="Created At" />
+          <DataTableColumnHeader column={column} title="Start Date" />
         ),
         cell: ({ row }) => {
           return (
             <div className="flex space-x-2">
               <span className="max-w-[500px] truncate">
-                {formatCreatedDateForTable(row.getValue("created_at"))}
+                {formatCreatedDateForTable(row.getValue("start_date"))}
               </span>
             </div>
           );
@@ -109,9 +94,41 @@ export function BrandsTableShell({ data, pageCount }: BrandsTableShellProps) {
         },
       },
       {
+        accessorKey: "end_date",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="End Date" />
+        ),
+        cell: ({ row }) => {
+          return (
+            <div className="flex space-x-2">
+              <span className="max-w-[500px] truncate">
+                {formatCreatedDateForTable(row.getValue("end_date"))}
+              </span>
+            </div>
+          );
+        },
+        enableSorting: false,
+        filterFn: (row, id, value) => {
+          return value instanceof Array && value.includes(row.getValue(id));
+        },
+      },
+      {
+        accessorKey: "deleted",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Deleted" />
+        ),
+        cell: ({ row }) => {
+          return <div className="capitalize">{String(row.getValue("deleted"))}</div>;
+        },
+        enableSorting: false,
+        filterFn: (row, id, value) => {
+          return value instanceof Array && value.includes(row.getValue(id));
+        },
+      },
+      {
         id: "actions",
         cell: function Cell({ row }) {
-          const brand = row.original;
+          const challenge = row.original;
           const router = useRouter();
           const [showDeleteAlert, setShowDeleteAlert] =
             React.useState<boolean>(false);
@@ -134,9 +151,9 @@ export function BrandsTableShell({ data, pageCount }: BrandsTableShellProps) {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-[160px]">
                   <DropdownMenuItem
-                  className="cursor-pointer"
+                    className="cursor-pointer"
                     onSelect={() => {
-                      router.push(`brands/edit/${brand.id}`);
+                      router.push(`challenges/edit/${challenge.id}`);
                     }}
                   >
                     Edit
@@ -156,7 +173,7 @@ export function BrandsTableShell({ data, pageCount }: BrandsTableShellProps) {
                 <AlertDialogContent>
                   <AlertDialogHeader>
                     <AlertDialogTitle>
-                      Are you sure you want to delete this brand?
+                      Are you sure you want to delete this challenge?
                     </AlertDialogTitle>
                     <AlertDialogDescription>
                       This action cannot be undone.
@@ -169,7 +186,7 @@ export function BrandsTableShell({ data, pageCount }: BrandsTableShellProps) {
                         event.preventDefault();
                         setIsDeleteLoading(true);
 
-                        const deleted = await deleteBrand(brand.id);
+                        const deleted = await deleteChallenge(challenge.id);
 
                         if (deleted) {
                           setIsDeleteLoading(false);

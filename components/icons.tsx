@@ -18,6 +18,7 @@ import {
   MoreVertical,
   Pizza,
   Plus,
+  Sword,
   Settings,
   SunMedium,
   Trash,
@@ -56,8 +57,9 @@ export const Icons = {
   dashboard: LayoutDashboard,
   sun: SunMedium,
   moon: Moon,
+  challenge: Sword,
   laptop: Laptop,
-  brand:Building2,
+  brand: Building2,
   gitHub: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden="true"
