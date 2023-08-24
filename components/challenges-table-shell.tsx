@@ -72,7 +72,6 @@ export function ChallengesTableShell({
             </div>
           );
         },
-        enableSorting: false,
       },
       {
         accessorKey: "start_date",
@@ -214,5 +213,17 @@ export function ChallengesTableShell({
     [isPending]
   );
 
-  return <DataTable columns={columns} data={data} pageCount={pageCount} />;
+  return (
+    <DataTable
+      columns={columns}
+      data={data}
+      pageCount={pageCount}
+      searchableColumns={[
+        {
+          id: "name",
+          title: "Name",
+        },
+      ]}
+    />
+  );
 }

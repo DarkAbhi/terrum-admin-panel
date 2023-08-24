@@ -18,23 +18,25 @@ interface IndexPageProps {
 }
 
 export default async function ChallengesPage({ searchParams }: IndexPageProps) {
-  const { page, per_page } = searchParams;
+  const { page, per_page, name } = searchParams;
 
   // Number of items per page
   const pageSize = typeof per_page === "string" ? parseInt(per_page) : 10;
   // Current page number
   const pageNumber = page === undefined ? 1 : page;
 
-  const apiResponse = await fetch(
-    `${BASE_API_URL}${CHALLENGES_ENDPOINT}?page=${pageNumber}&size=${pageSize}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${getAccessTokenCookie()}`,
-      },
-    }
-  );
+  let getAllChallengesUrl: string = `${BASE_API_URL}${CHALLENGES_ENDPOINT}?page=${pageNumber}&size=${pageSize}`;
+  if (name !== null && name !== undefined) {
+    getAllChallengesUrl = getAllChallengesUrl + `&name=${name}`;
+  }
+
+  const apiResponse = await fetch(getAllChallengesUrl, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getAccessTokenCookie()}`,
+    },
+  });
   const challenges = await apiResponse.json();
   const pageCount = challenges.total_pages;
 
