@@ -72,6 +72,7 @@ export function ChallengesTableShell({
             </div>
           );
         },
+        enableSorting: false,
       },
       {
         accessorKey: "start_date",
