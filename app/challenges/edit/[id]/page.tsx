@@ -29,7 +29,7 @@ export default async function EditChallenge({
 
   return (
     <div>
-      <DashboardHeader heading="Edit brand"></DashboardHeader>
+      <DashboardHeader heading="Edit challenge"></DashboardHeader>
       <EditChallengeForm challenge={challengeResponse} />
     </div>
   );

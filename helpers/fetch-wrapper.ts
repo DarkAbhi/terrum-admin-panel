@@ -19,15 +19,20 @@ export const fetchWrapper = {
 };
 
 function request(method: string) {
-  return async (url: string, body: JSONValue) => {
+  return async (url: string, body: JSONValue, formData?: FormData) => {
     const requestHeaders = authHeader(url);
-    requestHeaders.append("Content-Type", "application/json");
+    if (formData === undefined) {
+      requestHeaders.append("Content-Type", "application/json");
+    }
     const requestOptions: RequestInit = {
       method,
       headers: requestHeaders,
     };
     if (body) {
       requestOptions.body = JSON.stringify(body);
+    }
+    if (formData !== undefined) {
+      requestOptions.body = formData;
     }
     try {
       const response = await fetch(url, requestOptions);

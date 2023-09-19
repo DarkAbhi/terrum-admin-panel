@@ -48,17 +48,21 @@ export function EditChallengeForm({ challenge }: EditChallengeFormProps) {
       description: challenge.description,
       start_date: new Date(challenge.start_date),
       end_date: new Date(challenge.end_date),
+      image: z.instanceof(File),
     },
   });
 
   async function onSubmit(values: z.infer<typeof challengeFormSchema>) {
     setIsLoading(true);
+    const formData = new FormData();
+    formData.append("name", values.name);
+    formData.append("description", values.description);
+    formData.append("start_date", formatDateToISOString(values.start_date));
+    formData.append("end_date", formatDateToISOString(values.end_date));
+    formData.append("image", values.image, values.image.name);
     const apiResponse = await challengeService.editChallenge(
-        challenge.id,
-      values.name,
-      values.description,
-      formatDateToISOString(values.start_date),
-      formatDateToISOString(values.end_date)
+      challenge.id,
+      formData
     );
     setIsLoading(false);
     if (!apiResponse.error) {
@@ -152,7 +156,7 @@ export function EditChallengeForm({ challenge }: EditChallengeFormProps) {
               <FormMessage />
             </FormItem>
           )}
-        />{" "}
+        />
         <FormField
           control={form.control}
           name="end_date"
@@ -194,7 +198,44 @@ export function EditChallengeForm({ challenge }: EditChallengeFormProps) {
               <FormMessage />
             </FormItem>
           )}
-        />{" "}
+        />
+        <FormField
+          control={form.control}
+          name="image"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Challenge image</FormLabel>
+              <FormControl>
+                <Input
+                  type="file"
+                  multiple={false}
+                  accept="image/*"
+                  onChange={(e) =>
+                    field.onChange(e.target.files ? e.target.files[0] : null)
+                  }
+                />
+              </FormControl>
+              <FormDescription>
+                This will be displayed as the banner image for the challenge.
+                {challenge.image ? (
+                  <>
+                    &nbsp;Current Image:{" "}
+                    <a
+                      className="text-[#81d4fa]"
+                      href={challenge.image}
+                      target="_blank"
+                    >
+                      View
+                    </a>
+                  </>
+                ) : (
+                  ""
+                )}
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <Button disabled={isLoading} type="submit">
           {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
           Submit

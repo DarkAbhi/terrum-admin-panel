@@ -38,16 +38,20 @@ export function CreateChallengeForm() {
 
   const form = useForm<z.infer<typeof challengeFormSchema>>({
     resolver: zodResolver(challengeFormSchema),
+    defaultValues: {
+      image: z.instanceof(File),
+    },
   });
 
   async function onSubmit(values: z.infer<typeof challengeFormSchema>) {
     setIsLoading(true);
-    const apiResponse = await challengeService.createChallenge(
-      values.name,
-      values.description,
-      formatDateToISOString(values.start_date),
-      formatDateToISOString(values.end_date)
-    );
+    const formData = new FormData();
+    formData.append("name", values.name);
+    formData.append("description", values.description);
+    formData.append("start_date", formatDateToISOString(values.start_date));
+    formData.append("end_date", formatDateToISOString(values.end_date));
+    formData.append("image", values.image, values.image.name);
+    const apiResponse = await challengeService.createChallenge(formData);
     setIsLoading(false);
     if (!apiResponse.error) {
       router.push("/challenges");
@@ -140,7 +144,7 @@ export function CreateChallengeForm() {
               <FormMessage />
             </FormItem>
           )}
-        />{" "}
+        />
         <FormField
           control={form.control}
           name="end_date"
@@ -182,7 +186,30 @@ export function CreateChallengeForm() {
               <FormMessage />
             </FormItem>
           )}
-        />{" "}
+        />
+        <FormField
+          control={form.control}
+          name="image"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Challenge image</FormLabel>
+              <FormControl>
+                <Input
+                  type="file"
+                  multiple={false}
+                  accept="image/*"
+                  onChange={(e) =>
+                    field.onChange(e.target.files ? e.target.files[0] : null)
+                  }
+                />
+              </FormControl>
+              <FormDescription>
+                This will be displayed as the banner image for the challenge.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <Button disabled={isLoading} type="submit">
           {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
           Submit

@@ -10,33 +10,12 @@ export const challengeService = {
 
 const BRANDS_URL = `${BASE_API_URL}${CHALLENGES_ENDPOINT}`;
 
-async function createChallenge(
-  name: string,
-  description: string,
-  startDate: string,
-  endDate: string
-) {
-  return await fetchWrapper.post(`${BRANDS_URL}`, {
-    name: name,
-    description: description,
-    start_date: startDate,
-    end_date: endDate,
-  });
+async function createChallenge(formData: FormData) {
+  return await fetchWrapper.post(`${BRANDS_URL}`, null, formData);
 }
 
-async function editChallenge(
-  id: number,
-  name: string,
-  description: string,
-  startDate: string,
-  endDate: string
-) {
-  return await fetchWrapper.put(`${BRANDS_URL}${id}/`, {
-    name: name,
-    description: description,
-    start_date: startDate,
-    end_date: endDate,
-  });
+async function editChallenge(id: number, formData: FormData) {
+  return await fetchWrapper.put(`${BRANDS_URL}${id}/`, null, formData);
 }
 
 async function deleteChallenge(id: number) {

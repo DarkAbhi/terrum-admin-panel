@@ -4,6 +4,7 @@ import { DashboardHeader } from "@/components/header";
 import { BASE_API_URL } from "@/constants/constants";
 import { CHALLENGES_ENDPOINT } from "@/constants/routes";
 import { getAccessTokenCookie } from "@/lib/session";
+import { Challenge } from "@/types/challenge";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -18,16 +19,29 @@ interface IndexPageProps {
 }
 
 export default async function ChallengesPage({ searchParams }: IndexPageProps) {
-  const { page, per_page, name } = searchParams;
+  const { page, per_page, name, sort } = searchParams;
 
   // Number of items per page
   const pageSize = typeof per_page === "string" ? parseInt(per_page) : 10;
   // Current page number
   const pageNumber = page === undefined ? 1 : page;
 
+  const [column, order] =
+    typeof sort === "string"
+      ? (sort.split(".") as [
+          keyof Challenge | undefined,
+          "asc" | "desc" | undefined
+        ])
+      : [];
+
   let getAllChallengesUrl: string = `${BASE_API_URL}${CHALLENGES_ENDPOINT}?page=${pageNumber}&size=${pageSize}`;
   if (name !== null && name !== undefined) {
     getAllChallengesUrl = getAllChallengesUrl + `&name=${name}`;
+  }
+
+  if (column !== undefined && order !== undefined) {
+    getAllChallengesUrl =
+      getAllChallengesUrl + `&ordering=${order == "asc" ? "" : "-"}${column}`;
   }
 
   const apiResponse = await fetch(getAllChallengesUrl, {

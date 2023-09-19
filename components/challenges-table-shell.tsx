@@ -23,7 +23,7 @@ import {
 import { brandService } from "@/services/brand.service";
 import { Challenge } from "@/types/challenge";
 import { formatCreatedDateForTable } from "@/utils/date-utils";
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { CheckCircledIcon, CrossCircledIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { type ColumnDef } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
 import * as React from "react";
@@ -118,9 +118,17 @@ export function ChallengesTableShell({
           <DataTableColumnHeader column={column} title="Deleted" />
         ),
         cell: ({ row }) => {
-          return <div className="capitalize">{String(row.getValue("deleted"))}</div>;
+          return (
+            <div>
+              {row.getValue("deleted") ? (
+                <CheckCircledIcon className="text-green-600" />
+              ) : (
+                <CrossCircledIcon className="text-red-600"/>
+              )}
+            </div>
+          );
         },
-        enableSorting: false,
+        enableSorting: true,
         filterFn: (row, id, value) => {
           return value instanceof Array && value.includes(row.getValue(id));
         },
