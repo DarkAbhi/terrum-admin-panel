@@ -1,10 +1,11 @@
-import { BASE_API_URL } from "@/constants/constants";
-import { BrandsTableShell } from "@/components/brands-table-shell";
+import BrandsTable from "@/components/brand/brands-table";
 import CreateButton from "@/components/create-button";
 import { DashboardHeader } from "@/components/header";
-import { getAccessTokenCookie } from "@/lib/session";
-import { Metadata } from "next";
+import { DataTableLoading } from "@/components/ui/data-table/data-table-loading";
+import { BASE_API_URL } from "@/constants/constants";
 import { BRANDS_ENDPOINT } from "@/constants/routes";
+import { Metadata } from "next";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Brands",
@@ -30,24 +31,14 @@ export default async function BrandsPage({ searchParams }: IndexPageProps) {
     getAllBrandsUrl = getAllBrandsUrl + `&name=${name}`;
   }
 
-  const apiResponse = await fetch(getAllBrandsUrl, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${getAccessTokenCookie()}`,
-    },
-  });
-  const brands = await apiResponse.json();
-  const pageCount = brands.total_pages;
-
   return (
     <div>
       <DashboardHeader heading="Brands" text="Create and manage brands">
         <CreateButton text="Add brand" route="brands/create" />
       </DashboardHeader>
-      <div className="px-2 py-10">
-        <BrandsTableShell data={brands.results} pageCount={pageCount} />
-      </div>
+      <Suspense fallback={<DataTableLoading columnCount={5} rowCount={5} />}>
+        <BrandsTable url={getAllBrandsUrl} />
+      </Suspense>
     </div>
   );
 }

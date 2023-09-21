@@ -1,11 +1,12 @@
-import { ChallengesTableShell } from "@/components/challenges-table-shell";
+import ChallengesTable from "@/components/challenge/challenges-table";
 import CreateButton from "@/components/create-button";
 import { DashboardHeader } from "@/components/header";
+import { DataTableLoading } from "@/components/ui/data-table/data-table-loading";
 import { BASE_API_URL } from "@/constants/constants";
 import { CHALLENGES_ENDPOINT } from "@/constants/routes";
-import { getAccessTokenCookie } from "@/lib/session";
 import { Challenge } from "@/types/challenge";
 import { Metadata } from "next";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Challenges",
@@ -18,7 +19,7 @@ interface IndexPageProps {
   };
 }
 
-export default async function ChallengesPage({ searchParams }: IndexPageProps) {
+export default function ChallengesPage({ searchParams }: IndexPageProps) {
   const { page, per_page, name, sort } = searchParams;
 
   // Number of items per page
@@ -44,24 +45,14 @@ export default async function ChallengesPage({ searchParams }: IndexPageProps) {
       getAllChallengesUrl + `&ordering=${order == "asc" ? "" : "-"}${column}`;
   }
 
-  const apiResponse = await fetch(getAllChallengesUrl, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${getAccessTokenCookie()}`,
-    },
-  });
-  const challenges = await apiResponse.json();
-  const pageCount = challenges.total_pages;
-
   return (
     <div>
       <DashboardHeader heading="Challenges" text="Create and manage challenges">
         <CreateButton text="Add challenge" route="challenges/create" />
       </DashboardHeader>
-      <div className="px-2 py-10">
-        <ChallengesTableShell data={challenges.results} pageCount={pageCount} />
-      </div>
+      <Suspense fallback={<DataTableLoading columnCount={5} rowCount={5} />}>
+        <ChallengesTable url={getAllChallengesUrl} />
+      </Suspense>
     </div>
   );
 }
