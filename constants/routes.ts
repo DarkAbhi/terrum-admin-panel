@@ -9,3 +9,9 @@ export const BRANDS_ENDPOINT = "/staff/brand/";
  * @constant
  */
 export const CHALLENGES_ENDPOINT = "/challenges/";
+
+/**
+ * The endpoint to perform operations with brands.
+ * @constant
+ */
+export const USERS_ENDPOINT = "/users/";
