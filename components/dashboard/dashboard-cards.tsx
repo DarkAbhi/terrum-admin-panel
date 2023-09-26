@@ -54,6 +54,15 @@ export default async function DashboardCards() {
           </CardHeader>
         </Card>
       </Link>
+      <Card>
+        <CardHeader>
+          <CardTitle>Communities</CardTitle>
+          {/* Display the total number of communities */}
+          <CardDescription>
+            Total: {dashboardCardsResponse.communities}
+          </CardDescription>
+        </CardHeader>
+      </Card>
     </div>
   );
 }
