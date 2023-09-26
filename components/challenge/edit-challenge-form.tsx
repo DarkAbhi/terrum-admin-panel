@@ -66,7 +66,7 @@ export function EditChallengeForm({ challenge }: EditChallengeFormProps) {
     );
     setIsLoading(false);
     if (!apiResponse.error) {
-      router.push("/challenges");
+      router.push("/admin/challenges");
       router.refresh();
     } else {
       toast({

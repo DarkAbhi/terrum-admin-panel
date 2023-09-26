@@ -34,7 +34,7 @@ export default function CreateBrandForm() {
     const apiResponse = await brandService.createBrand(data.name, data.website);
     setIsLoading(false);
     if (!apiResponse.error) {
-      router.push("/brands");
+      router.push("/admin/brands");
     } else {
       toast({
         variant: "destructive",

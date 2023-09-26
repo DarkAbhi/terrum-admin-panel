@@ -11,7 +11,7 @@ export default function LoginPage() {
   const loggedIn = getUserLoggedIn();
 
   if (loggedIn) {
-    redirect("/dashboard");
+    redirect("/admin/dashboard");
   }
   return (
     <main>

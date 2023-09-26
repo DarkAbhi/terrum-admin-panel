@@ -54,7 +54,7 @@ export function CreateChallengeForm() {
     const apiResponse = await challengeService.createChallenge(formData);
     setIsLoading(false);
     if (!apiResponse.error) {
-      router.push("/challenges");
+      router.push("/admin/challenges");
       router.refresh();
     } else {
       toast({

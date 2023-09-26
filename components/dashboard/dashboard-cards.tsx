@@ -31,7 +31,7 @@ export default async function DashboardCards() {
     // Render a grid of card-based navigation links.
     <div className="mt-4 grid grid-cols-2 md:grid-cols-5 gap-3">
       {/* Create a link to the "Brands" page */}
-      <Link href="/brands">
+      <Link href="/admin/brands">
         <Card>
           <CardHeader>
             <CardTitle>Brands</CardTitle>
@@ -43,7 +43,7 @@ export default async function DashboardCards() {
         </Card>
       </Link>
       {/* Create a link to the "Users" page */}
-      <Link href="/users">
+      <Link href="/admin/users">
         <Card>
           <CardHeader>
             <CardTitle>Users</CardTitle>

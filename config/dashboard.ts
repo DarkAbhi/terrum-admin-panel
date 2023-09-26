@@ -13,18 +13,18 @@ export const dashboardConfig: DashboardConfig = {
       // Title of the sidebar navigation item.
       title: "Dashboard",
       // Href is the URL or route associated with the navigation item.
-      href: "/dashboard",
+      href: "/admin/dashboard",
       // Icon is an optional icon associated with the navigation item.
       icon: "dashboard",
     },
     {
       title: "Brands",
-      href: "/brands",
+      href: "/admin/brands",
       icon: "brand",
     },
     {
       title: "Challenges",
-      href: "/challenges",
+      href: "/admin/challenges",
       icon: "challenge",
     },
     {

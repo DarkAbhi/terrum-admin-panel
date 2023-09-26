@@ -43,7 +43,7 @@ export default function UserAuthForm() {
         secure: true,
         expires: 30,
       });
-      router.push("/dashboard");
+      router.push("/admin/dashboard");
     } else {
       toast({
         variant: "destructive",

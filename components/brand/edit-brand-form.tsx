@@ -47,7 +47,7 @@ export default function EditBrandForm({ brand }: EditBrandFormProps) {
     );
     setIsLoading(false);
     if (!apiResponse.error) {
-      router.push("/brands");
+      router.push("/admin/brands");
       router.refresh();
     } else {
       toast({
