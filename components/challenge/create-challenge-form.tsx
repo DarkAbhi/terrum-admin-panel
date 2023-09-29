@@ -38,9 +38,6 @@ export function CreateChallengeForm() {
 
   const form = useForm<z.infer<typeof challengeFormSchema>>({
     resolver: zodResolver(challengeFormSchema),
-    defaultValues: {
-      image: z.instanceof(File),
-    },
   });
 
   async function onSubmit(values: z.infer<typeof challengeFormSchema>) {
@@ -50,7 +47,8 @@ export function CreateChallengeForm() {
     formData.append("description", values.description);
     formData.append("start_date", formatDateToISOString(values.start_date));
     formData.append("end_date", formatDateToISOString(values.end_date));
-    formData.append("image", values.image, values.image.name);
+    if (values.image != undefined)
+      formData.append("image", values.image, values.image.name);
     const apiResponse = await challengeService.createChallenge(formData);
     setIsLoading(false);
     if (!apiResponse.error) {

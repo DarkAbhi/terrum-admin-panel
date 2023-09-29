@@ -26,5 +26,5 @@ export const challengeFormSchema = z.object({
     .refine(
       (files) => ACCEPTED_IMAGE_TYPES.includes(files?.type),
       ".jpg, .jpeg, .png and .webp files are accepted."
-    ),
+    ).optional(),
 });

@@ -48,7 +48,6 @@ export function EditChallengeForm({ challenge }: EditChallengeFormProps) {
       description: challenge.description,
       start_date: new Date(challenge.start_date),
       end_date: new Date(challenge.end_date),
-      image: z.instanceof(File),
     },
   });
 
@@ -59,7 +58,8 @@ export function EditChallengeForm({ challenge }: EditChallengeFormProps) {
     formData.append("description", values.description);
     formData.append("start_date", formatDateToISOString(values.start_date));
     formData.append("end_date", formatDateToISOString(values.end_date));
-    formData.append("image", values.image, values.image.name);
+    if (values.image != undefined)
+      formData.append("image", values.image, values.image.name);
     const apiResponse = await challengeService.editChallenge(
       challenge.id,
       formData
