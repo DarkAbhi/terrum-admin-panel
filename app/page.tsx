@@ -1,18 +1,20 @@
 import { Metadata } from "next";
 import UserAuthForm from "@/components/user-auth-form";
-import { getUserLoggedIn } from "@/lib/session";
+import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+import { authOptions } from "./api/auth/[...nextauth]/options";
 
 export const metadata: Metadata = {
   title: "Login",
   description: "Login to your account",
 };
-export default function LoginPage() {
-  const loggedIn = getUserLoggedIn();
+export default async function LoginPage() {
+  const session = await getServerSession(authOptions);
 
-  if (loggedIn) {
+  if (session) {
     redirect("/admin/dashboard");
   }
+
   return (
     <main>
       <div className="container flex h-screen w-screen flex-col items-center justify-center">

@@ -1,25 +1,16 @@
-import { MainNav } from "@/components/main-nav";
-import { dashboardConfig } from "@/config/dashboard";
-import { SiteFooter } from "@/components/site-footer";
 import { DashboardNav } from "@/components/dashboard-nav";
-import { getUserLoggedIn } from "@/lib/session";
-import { redirect } from "next/navigation";
-import { UserAccountNav } from "@/components/user-account-nav";
+import { MainNav } from "@/components/main-nav";
+import { SiteFooter } from "@/components/site-footer";
 import { ModeToggle } from "@/components/theme-toggle";
+import { UserAccountNav } from "@/components/user-account-nav";
+import { dashboardConfig } from "@/config/dashboard";
 import NextTopLoader from "nextjs-toploader";
-
 
 interface AdminLayoutProps {
   children?: React.ReactNode;
 }
 
 export default async function AdminLayout({ children }: AdminLayoutProps) {
-  const loggedIn = getUserLoggedIn();
-
-  if (!loggedIn) {
-    redirect("/");
-  }
-
   return (
     <div>
       <NextTopLoader color="#0095D8" showSpinner={false} />

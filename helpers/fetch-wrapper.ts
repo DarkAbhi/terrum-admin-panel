@@ -1,6 +1,8 @@
 import { BASE_API_URL } from "@/constants/constants";
-import { authService } from "@/services/auth.service";
-import Cookies from "js-cookie";
+import { getServerSession } from "next-auth/next";
+import { getSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 
 type JSONValue =
   | boolean
@@ -20,7 +22,7 @@ export const fetchWrapper = {
 
 function request(method: string) {
   return async (url: string, body: JSONValue, formData?: FormData) => {
-    const requestHeaders = authHeader(url);
+    const requestHeaders = await authHeader(url);
     if (formData === undefined) {
       requestHeaders.append("Content-Type", "application/json");
     }
@@ -44,14 +46,17 @@ function request(method: string) {
 }
 
 // helper functions
-
-function authHeader(url: string) {
+async function authHeader(url: string) {
+  const session =
+    typeof window === "undefined"
+      ? await getServerSession(authOptions)
+      : await getSession();
   // return auth header with jwt if user is logged in and request is to the api url
-  const isLoggedIn = true ? Cookies.get("access_token") : false;
+  const isLoggedIn = true ? session : false;
   const isApiUrl = url.startsWith(BASE_API_URL);
   let headers: HeadersInit = new Headers();
   if (isLoggedIn && isApiUrl) {
-    headers.append("Authorization", `Bearer ${Cookies.get("access_token")}`);
+    headers.append("Authorization", `Bearer ${session?.user.accessToken}`);
   }
   return headers;
 }
@@ -66,7 +71,7 @@ async function handleResponse(response: Response) {
   if (!response.ok) {
     if ([401, 403].includes(response.status)) {
       // auto logout if 401 Unauthorized or 403 Forbidden response returned from api
-      authService.logout();
+      signOut({ callbackUrl: "/" });
     }
   }
   return data;

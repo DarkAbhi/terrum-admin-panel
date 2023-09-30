@@ -1,16 +1,18 @@
-import { getAccessTokenCookie } from "@/lib/session";
 import { ChallengesTableShell } from "../challenges-table-shell";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 
 interface ChallengesTableProps {
   url: string;
 }
 
 async function ChallengesTable({ url }: ChallengesTableProps) {
+  const session = await getServerSession(authOptions);
   const apiResponse = await fetch(url, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${getAccessTokenCookie()}`,
+      Authorization: `Bearer ${session?.user.accessToken}`,
     },
   });
 

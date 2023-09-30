@@ -4,6 +4,7 @@
  *
  * @returns {JSX.Element} - A React JSX element representing the dashboard cards.
  */
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import {
   Card,
   CardDescription,
@@ -11,16 +12,18 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { BASE_API_URL } from "@/constants/constants";
-import { getAccessTokenCookie } from "@/lib/session";
+import { getServerSession } from "next-auth/next";
 import Link from "next/link";
 
 export default async function DashboardCards() {
+  const session = await getServerSession(authOptions);
+
   // Fetch data from the API endpoint for the dashboard cards.
   const apiResponse = await fetch(`${BASE_API_URL}/staff/dashboard-home`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${getAccessTokenCookie()}`,
+      Authorization: `Bearer ${session?.user.accessToken}`,
     },
   });
 

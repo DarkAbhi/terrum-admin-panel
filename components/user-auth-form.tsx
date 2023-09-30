@@ -2,22 +2,22 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { authService } from "@/services/auth.service";
+import { userAuthSchema } from "@/lib/validations/auth";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signIn } from "next-auth/react";
 import * as React from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { userAuthSchema } from "@/lib/validations/auth";
 import * as z from "zod";
-import { useRouter } from "next/navigation";
-import { useToast } from "./ui/use-toast";
 import { Icons } from "./icons";
-import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
+
+import { useToast } from "./ui/use-toast";
 
 type FormData = z.infer<typeof userAuthSchema>;
 
 export default function UserAuthForm() {
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const router = useRouter();
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const { toast } = useToast();
 
   const {
@@ -28,28 +28,26 @@ export default function UserAuthForm() {
     resolver: zodResolver(userAuthSchema),
   });
 
-  async function onSubmit(data: FormData) {
+  function onSubmit(data: FormData) {
     setIsLoading(true);
-    const login = await authService.login(data.email, data.password);
-    setIsLoading(false);
-    if (!login.error) {
-      const user = {
-        "name": login.name,
-        "username": login.username
+    signIn("credentials", {
+      email: data.email,
+      password: data.password,
+      redirect: false,
+    }).then((res) => {
+      if (res?.error === null) {
+        // Handle successful login
+        setIsLoading(false);
+        router.push("/admin/dashboard");
+      } else {
+        // Handle error
+        setIsLoading(false);
+        toast({
+          variant: "destructive",
+          title: "Invalid Email/password",
+        });
       }
-      localStorage.setItem("user",JSON.stringify(user))
-      Cookies.set("access_token", login.token, {
-        sameSite: "Lax",
-        secure: true,
-        expires: 30,
-      });
-      router.push("/admin/dashboard");
-    } else {
-      toast({
-        variant: "destructive",
-        title: login.error,
-      });
-    }
+    });
   }
 
   return (

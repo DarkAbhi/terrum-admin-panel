@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,13 +9,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
-import { useRouter } from "next/navigation";
-import Cookies from "js-cookie";
+import { useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 
 export function UserAccountNav() {
-  const router = useRouter();
-
-  const user = JSON.parse(localStorage.getItem("user") ?? "{}");
+  const { data: session } = useSession();
 
   return (
     <DropdownMenu>
@@ -29,10 +26,12 @@ export function UserAccountNav() {
       <DropdownMenuContent align="end">
         <div className="flex items-center justify-start gap-2 p-2">
           <div className="flex flex-col space-y-1 leading-none">
-            {user.name && <p className="font-medium">{user.name}</p>}
-            {user.username && (
+            {session?.user?.name && (
+              <p className="font-medium">{session?.user.name}</p>
+            )}
+            {session?.user?.username && (
               <p className="w-[200px] truncate text-sm text-muted-foreground">
-                {user.username}
+                {session?.user?.username}
               </p>
             )}
           </div>
@@ -45,10 +44,7 @@ export function UserAccountNav() {
         <DropdownMenuItem
           className="cursor-pointer"
           onSelect={(event) => {
-            event.preventDefault();
-            localStorage.removeItem("user");
-            Cookies.remove("access_token");
-            router.push("/");
+            signOut({ callbackUrl: "/" });
           }}
         >
           Sign out
