@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,26 +20,17 @@ export function UserAccountNav() {
     <DropdownMenu>
       <DropdownMenuTrigger>
         <Avatar className="h-8 w-8">
-          <AvatarImage src="https://github.com/iku-earth.png" />
+          <AvatarImage
+            src={session?.user.image ?? "/profile_picture_placeholder.png"}
+          />
           <AvatarFallback>AN</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <div className="flex items-center justify-start gap-2 p-2">
-          <div className="flex flex-col space-y-1 leading-none">
-            {session?.user?.name && (
-              <p className="font-medium">{session?.user.name}</p>
-            )}
-            {session?.user?.username && (
-              <p className="w-[200px] truncate text-sm text-muted-foreground">
-                {session?.user?.username}
-              </p>
-            )}
-          </div>
-        </div>
-        <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link href="/admin/brands">Brands</Link>
+          <Link className="cursor-pointer" href="/admin/profile">
+            My Profile
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
