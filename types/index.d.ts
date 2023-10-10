@@ -10,7 +10,12 @@ export type MainNavItem = NavItem;
 
 export type DashboardConfig = {
   mainNav: MainNavItem[];
-  sidebarNav: SidebarNavItem[];
+  sidebarNav: SidebarNavGroup[];
+};
+
+export type SidebarNavGroup = {
+  name: string;
+  items: SidebarNavItem[];
 };
 
 export type SidebarNavItem = {
