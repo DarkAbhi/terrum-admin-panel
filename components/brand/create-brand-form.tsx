@@ -11,6 +11,15 @@ import { brandService } from "@/services/brand.service";
 import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 import { Icons } from "../icons";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 
 type FormData = z.infer<typeof brandFormSchema>;
 
@@ -20,12 +29,7 @@ export default function CreateBrandForm() {
 
   const { toast } = useToast();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    clearErrors,
-  } = useForm<FormData>({
+  const form = useForm<z.infer<typeof brandFormSchema>>({
     resolver: zodResolver(brandFormSchema),
   });
 
@@ -45,28 +49,45 @@ export default function CreateBrandForm() {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="px-2 py-8 flex w-full flex-col space-y-6 sm:w-[350px]"
-    >
-      <div className="grid w-full max-w-sm items-center gap-1.5">
-        <Input
-          {...register("name")}
-          type="text"
-          placeholder="Brand name"
-          onChange={() => {
-            clearErrors("name");
-          }}
+    <Form {...form}>
+      <form
+        noValidate
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="px-2 py-8 flex w-full flex-col space-y-6 sm:w-[350px]"
+      >
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input placeholder="Brand name" {...field} />
+              </FormControl>
+              <FormDescription></FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-        {errors?.name && (
-          <p className="px-1 text-xs text-red-600">{errors.name.message}</p>
-        )}
-      </div>
-      <Input type="text" placeholder="Brand website" {...register("website")} />
-      <Button disabled={isLoading} className="w-1/2">
-        {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-        Create
-      </Button>
-    </form>
+        <FormField
+          control={form.control}
+          name="website"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Website</FormLabel>
+              <FormControl>
+                <Input placeholder="Brand website" {...field} />
+              </FormControl>
+              <FormDescription></FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button disabled={isLoading} className="w-1/2">
+          {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+          Create
+        </Button>
+      </form>
+    </Form>
   );
 }

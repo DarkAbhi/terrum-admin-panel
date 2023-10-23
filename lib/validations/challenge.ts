@@ -17,14 +17,14 @@ export const challengeFormSchema = z.object({
     .min(12, { message: "Description should be minimum 60 characters." }),
   start_date: z.date(),
   end_date: z.date(),
+  few: z.array(z.string().nonempty("A string cannot be empty")),
+
   image: z
     .any()
-    .refine(
-      (files) => files?.size <= MAX_FILE_SIZE,
-      `Max file size is 5MB.`
-    )
+    .refine((files) => files?.size <= MAX_FILE_SIZE, `Max file size is 5MB.`)
     .refine(
       (files) => ACCEPTED_IMAGE_TYPES.includes(files?.type),
       ".jpg, .jpeg, .png and .webp files are accepted."
-    ).optional(),
+    )
+    .optional(),
 });
