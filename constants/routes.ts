@@ -17,6 +17,12 @@ export const CHALLENGES_ENDPOINT = "/challenges/";
 export const USERS_ENDPOINT = "/users/";
 
 /**
+ * The endpoint to perform operations with shopping categories.
+ * @constant
+ */
+export const SHOPPING_CATEGORIES_ENDPOINT = "/shopping-category/";
+
+/**
  * The endpoint gets the logged in user profile.
  * @constant
  */

@@ -20,39 +20,38 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { brandService } from "@/services/brand.service";
-import { Brand } from "@/types/brand";
 import { formatCreatedDateForTable } from "@/utils/date-utils";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { type ColumnDef } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
 import * as React from "react";
-import { toast } from "./ui/use-toast";
+import { toast } from "@/components/ui/use-toast";
+import { shoppingCategoryService } from "@/services/shopping-category.service";
+import { ShoppingCategory } from "@/types/shopping-category";
 
-interface BrandsTableShellProps {
-  data: Brand[];
+interface ShoppingCategoryTableShellProps {
+  data: ShoppingCategory[];
   pageCount: number;
 }
 
-async function deleteBrand(brandId: number) {
-  const response = await brandService.deleteBrand(brandId);
-
+async function deleteShoppingCategory(shoppingCategoryId: number) {
+  const response = await shoppingCategoryService.deleteShoppingCategory(shoppingCategoryId);
   if (response.status) {
     return true;
   }
 
   toast({
     title: "Something went wrong.",
-    description: "Brand was not deleted. Please try again.",
+    description: "Shopping category was not deleted. Please try again.",
     variant: "destructive",
   });
 }
 
-export function BrandsTableShell({ data, pageCount }: BrandsTableShellProps) {
+export function ShoppingCategoryTableShell({ data, pageCount }: ShoppingCategoryTableShellProps) {
   const [isPending, startTransition] = React.useTransition();
 
   // Memoize the columns so they don't re-render on every render
-  const columns = React.useMemo<ColumnDef<Brand, unknown>[]>(
+  const columns = React.useMemo<ColumnDef<ShoppingCategory, unknown>[]>(
     () => [
       {
         accessorKey: "name",
@@ -71,34 +70,15 @@ export function BrandsTableShell({ data, pageCount }: BrandsTableShellProps) {
         enableSorting: false,
       },
       {
-        accessorKey: "website",
+        accessorKey: "updated_at",
         header: ({ column }) => (
-          <DataTableColumnHeader column={column} title="Website" />
-        ),
-        cell: ({ row }) => {
-          return (
-              <div className="flex space-x-2">
-              <a href={row.getValue("website")} target="_blank" className="max-w-[500px] truncate">
-                {row.getValue("website")}
-              </a>
-            </div>
-          );
-        },
-        enableSorting: false,
-        filterFn: (row, id, value) => {
-          return value instanceof Array && value.includes(row.getValue(id));
-        },
-      },
-      {
-        accessorKey: "created_at",
-        header: ({ column }) => (
-          <DataTableColumnHeader column={column} title="Created At" />
+          <DataTableColumnHeader column={column} title="Updated At" />
         ),
         cell: ({ row }) => {
           return (
             <div className="flex space-x-2">
               <span className="max-w-[500px] truncate">
-                {formatCreatedDateForTable(row.getValue("created_at"))}
+                {formatCreatedDateForTable(row.getValue("updated_at"))}
               </span>
             </div>
           );
@@ -111,7 +91,7 @@ export function BrandsTableShell({ data, pageCount }: BrandsTableShellProps) {
       {
         id: "actions",
         cell: function Cell({ row }) {
-          const brand = row.original;
+          const shoppingCategory = row.original;
           const router = useRouter();
           const [showDeleteAlert, setShowDeleteAlert] =
             React.useState<boolean>(false);
@@ -133,14 +113,14 @@ export function BrandsTableShell({ data, pageCount }: BrandsTableShellProps) {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-[160px]">
-                  <DropdownMenuItem
-                  className="cursor-pointer"
+                  {/* <DropdownMenuItem
+                    className="cursor-pointer"
                     onSelect={() => {
-                      router.push(`brands/edit/${brand.id}`);
+                      router.push(``);
                     }}
                   >
                     Edit
-                  </DropdownMenuItem>
+                  </DropdownMenuItem> */}
                   <DropdownMenuItem
                     className="flex cursor-pointer items-center text-destructive focus:text-destructive"
                     onSelect={() => setShowDeleteAlert(true)}
@@ -156,7 +136,7 @@ export function BrandsTableShell({ data, pageCount }: BrandsTableShellProps) {
                 <AlertDialogContent>
                   <AlertDialogHeader>
                     <AlertDialogTitle>
-                      Are you sure you want to delete this brand?
+                      Are you sure you want to delete this shopping category?
                     </AlertDialogTitle>
                     <AlertDialogDescription>
                       This action cannot be undone.
@@ -169,7 +149,7 @@ export function BrandsTableShell({ data, pageCount }: BrandsTableShellProps) {
                         event.preventDefault();
                         setIsDeleteLoading(true);
 
-                        const deleted = await deleteBrand(brand.id);
+                        const deleted = await deleteShoppingCategory(shoppingCategory.id);
 
                         if (deleted) {
                           setIsDeleteLoading(false);

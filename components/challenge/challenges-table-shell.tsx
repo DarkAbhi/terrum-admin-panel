@@ -23,11 +23,15 @@ import {
 import { brandService } from "@/services/brand.service";
 import { Challenge } from "@/types/challenge";
 import { formatCreatedDateForTable } from "@/utils/date-utils";
-import { CheckCircledIcon, CrossCircledIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
+import {
+  CheckCircledIcon,
+  CrossCircledIcon,
+  DotsHorizontalIcon,
+} from "@radix-ui/react-icons";
 import { type ColumnDef } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
 import * as React from "react";
-import { toast } from "./ui/use-toast";
+import { toast } from "../ui/use-toast";
 import { challengeService } from "@/services/challenge.service";
 
 interface ChallengesTableShellProps {
@@ -123,7 +127,7 @@ export function ChallengesTableShell({
               {row.getValue("deleted") ? (
                 <CheckCircledIcon className="text-green-600" />
               ) : (
-                <CrossCircledIcon className="text-red-600"/>
+                <CrossCircledIcon className="text-red-600" />
               )}
             </div>
           );

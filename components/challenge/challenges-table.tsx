@@ -1,4 +1,4 @@
-import { ChallengesTableShell } from "../challenges-table-shell";
+import { ChallengesTableShell } from "./challenges-table-shell";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 

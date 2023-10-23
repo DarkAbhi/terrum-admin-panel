@@ -43,5 +43,15 @@ export const dashboardConfig: DashboardConfig = {
         },
       ],
     },
+    {
+      name: "E-commerce",
+      items: [
+        {
+          title: "Shopping Categories",
+          href: "/admin/ecom/shopping-categories",
+          icon: "brand",
+        },
+      ],
+    },
   ],
 };
