@@ -27,3 +27,5 @@ export const SHOPPING_CATEGORIES_ENDPOINT = "/shopping-category/";
  * @constant
  */
 export const STAFF_PROFILE_ENDPOINT = "/staff-profile";
+
+export const ALL_SHOPPING_CATEGORIES_ENDPOINT = "/all-shopping-categories/";

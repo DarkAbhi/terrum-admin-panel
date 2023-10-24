@@ -49,7 +49,7 @@ export const dashboardConfig: DashboardConfig = {
         {
           title: "Shopping Categories",
           href: "/admin/ecom/shopping-categories",
-          icon: "brand",
+          icon: "shoppingBag",
         },
       ],
     },

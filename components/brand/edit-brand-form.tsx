@@ -21,14 +21,17 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { ShoppingCategory } from "@/types/shopping-category";
+import { MultiSelect } from "../ui/multi-select";
 
 type FormData = z.infer<typeof brandFormSchema>;
 
 interface EditBrandFormProps {
   brand: Brand;
+  shoppingCategories: ShoppingCategory[];
 }
 
-export default function EditBrandForm({ brand }: EditBrandFormProps) {
+export default function EditBrandForm({ brand, shoppingCategories }: EditBrandFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const router = useRouter();
 
@@ -39,6 +42,7 @@ export default function EditBrandForm({ brand }: EditBrandFormProps) {
     defaultValues: {
       name: brand.name,
       website: brand.website,
+      categories: brand.categories.map(category => category.id.toString())
     },
   });
 
@@ -47,7 +51,8 @@ export default function EditBrandForm({ brand }: EditBrandFormProps) {
     const apiResponse = await brandService.editBrand(
       brand.id,
       data.name,
-      data.website
+      data.website,
+      data.categories
     );
     setIsLoading(false);
     if (!apiResponse.error) {
@@ -96,9 +101,28 @@ export default function EditBrandForm({ brand }: EditBrandFormProps) {
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="categories"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Select categories</FormLabel>
+              <MultiSelect
+                selected={field.value}
+                options={shoppingCategories.map((item) => ({
+                  label: item.name,
+                  value: item.id.toString(),
+                }))}
+                {...field}
+                className="sm:w-[510px]"
+              />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <Button disabled={isLoading} className="w-1/2">
           {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-          Create
+          Update
         </Button>
       </form>
     </Form>

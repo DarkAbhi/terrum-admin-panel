@@ -10,17 +10,24 @@ export const brandService = {
 
 const BRANDS_URL = `${BASE_API_URL}${BRANDS_ENDPOINT}`;
 
-async function createBrand(name: string, website: string) {
+async function createBrand(name: string, website: string, categories: string[]) {
   return await fetchWrapper.post(`${BRANDS_URL}`, {
     name,
     website,
+    categories
   });
 }
 
-async function editBrand(id: number, name: string, website: string) {
+async function editBrand(
+  id: number,
+  name: string,
+  website: string,
+  categories: string[]
+) {
   return await fetchWrapper.put(`${BRANDS_URL}${id}/`, {
     name,
     website,
+    categories
   });
 }
 

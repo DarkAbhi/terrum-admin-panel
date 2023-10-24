@@ -8,5 +8,5 @@
 export type ShoppingCategory = {
   id: number;
   name: string;
-  updated_at: string;
+  updated_at?: string;
 };

@@ -9,8 +9,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { brandService } from "@/services/brand.service";
 import { useRouter } from "next/navigation";
-import { Button } from "../ui/button";
-import { Icons } from "../icons";
+import { Button } from "@/components/ui/button";
+import { Icons } from "@/components/icons";
 import {
   Form,
   FormControl,
@@ -20,10 +20,18 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { MultiSelect } from "../ui/multi-select";
+import { ShoppingCategory } from "@/types/shopping-category";
 
 type FormData = z.infer<typeof brandFormSchema>;
 
-export default function CreateBrandForm() {
+interface CreateBrandFormProps {
+  shoppingCategories: ShoppingCategory[];
+}
+
+export default function CreateBrandForm({
+  shoppingCategories,
+}: CreateBrandFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const router = useRouter();
 
@@ -31,11 +39,18 @@ export default function CreateBrandForm() {
 
   const form = useForm<z.infer<typeof brandFormSchema>>({
     resolver: zodResolver(brandFormSchema),
+    defaultValues: {
+      categories: [],
+    },
   });
 
   async function onSubmit(data: FormData) {
-    setIsLoading(true);
-    const apiResponse = await brandService.createBrand(data.name, data.website);
+    setIsLoading(true);    
+    const apiResponse = await brandService.createBrand(
+      data.name,
+      data.website,
+      data.categories
+    );
     setIsLoading(false);
     if (!apiResponse.error) {
       router.push("/admin/brands");
@@ -79,6 +94,25 @@ export default function CreateBrandForm() {
                 <Input placeholder="Brand website" {...field} />
               </FormControl>
               <FormDescription></FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="categories"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Select categories</FormLabel>
+              <MultiSelect
+                selected={field.value}
+                options={shoppingCategories.map((item) => ({
+                  label: item.name,
+                  value: item.id.toString(),
+                }))}
+                {...field}
+                className="sm:w-[510px]"
+              />
               <FormMessage />
             </FormItem>
           )}
