@@ -53,5 +53,15 @@ export const dashboardConfig: DashboardConfig = {
         },
       ],
     },
+    {
+      name: "Sumbissions",
+      items: [
+        {
+          title: "Brand Requests",
+          href: "/admin/submissions/brands",
+          icon: "brand",
+        },
+      ],
+    },
   ],
 };

@@ -28,4 +28,14 @@ export const SHOPPING_CATEGORIES_ENDPOINT = "/shopping-category/";
  */
 export const STAFF_PROFILE_ENDPOINT = "/staff-profile";
 
+/**
+ * The endpoint gets the available shopping categories.
+ * @constant
+ */
 export const ALL_SHOPPING_CATEGORIES_ENDPOINT = "/all-shopping-categories/";
+
+/**
+ * The endpoint to perform operations with brand submissions.
+ * @constant
+ */
+export const BRAND_SUBMISSIONS_ENDPOINT = "/staff/brand-submissions/";
