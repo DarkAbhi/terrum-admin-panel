@@ -1,16 +1,16 @@
-import { BASE_API_URL } from "@/constants/constants";
-import { fetchWrapper } from "@/helpers/fetch-wrapper";
+import {BASE_API_URL} from "@/constants/constants";
+import {fetchWrapper} from "@/helpers/fetch-wrapper";
 
 export const authService = {
-  login,
+    login,
 };
 
 async function login(
-  email?: string,
-  password?: string
+    email?: string,
+    password?: string
 ): Promise<LoginResponse> {
-  return await fetchWrapper.post(`${BASE_API_URL}/staff-login`, {
-    email: `${email}`,
-    password: `${password}`,
-  });
+    return await fetchWrapper.post(`${BASE_API_URL}/staff-login`, {
+        email: `${email}`,
+        password: `${password}`,
+    });
 }
